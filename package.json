@@ -1,0 +1,24 @@
+{
+  "name": "media-list-application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/scripts/main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikitovicsmark/media-list-application.git"
+  },
+  "author": "Mark Mikitovics",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mikitovicsmark/media-list-application/issues"
+  },
+  "homepage": "https://github.com/mikitovicsmark/media-list-application#readme",
+  "devDependencies": {
+    "jquery": "^3.1.1",
+    "babel-preset-env": "^1.1.8",
+    "requirejs-babel": "0.0.9"
+  }
+}
