@@ -4,7 +4,8 @@
   "description": "",
   "main": "/scripts/main.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "r.js -o js/common.js"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,9 @@
   },
   "homepage": "https://github.com/mikitovicsmark/media-list-application#readme",
   "devDependencies": {
-    "jquery": "^3.1.1",
     "babel-preset-env": "^1.1.8",
+    "jquery": "^3.1.1",
+    "requirejs": "^2.3.2",
     "requirejs-babel": "0.0.9"
   }
 }

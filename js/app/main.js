@@ -1,5 +1,13 @@
-define((require) => {
-    const $ = require('jquery');
-    const controller = require('./controller/mainController');
-    const model = require('./model/mainModel');
-});
+import MainController from 'app/controller/mainController';
+import MainModel from 'app/model/mainModel';
+import $ from 'jquery';
+import jQuery from 'jquery';
+
+class MainClass {
+  constructor() {
+    const controller = new MainController;
+    const model = new MainModel;
+  }
+}
+
+new MainClass;
