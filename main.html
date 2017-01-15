@@ -7,7 +7,7 @@
         <h1>My Sample Project</h1>
         <div>
           Filter by: 
-          <select id="filter-value" onchange="model.keksimus()">
+          <select id="filter-value" onchange="ctrl.updateList()">
             <option value="id">ID</option>
             <option value="type">Type</option>
             <option value="isLive">Live</option>
@@ -18,7 +18,7 @@
             <option value="location.country">Country</option>
             <option value="location.city">City</option>          
           </select>
-          <select id="filter-direction">
+          <select id="filter-direction" onchange="ctrl.updateList()">
             <option value="asc" selected="selected">Ascending</option>
             <option value="desc">Descending</option>         
           </select>

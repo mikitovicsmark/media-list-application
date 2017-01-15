@@ -5,8 +5,10 @@ import jQuery from 'jquery';
 
 class MainClass {
   constructor() {
-    const controller = new MainController;
-    const model = new MainModel;
+    window.model = new MainModel;
+    window.model.getData().then((data) => {
+      window.ctrl = new MainController(data);
+    });
   }
 }
 
