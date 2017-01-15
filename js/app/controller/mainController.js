@@ -31,19 +31,22 @@ class MainController {
 
   customSort(a, b) {
     const property = $("#filter-value").val();
-    const dotIndex = property.indexOf('.');
 
-    // might be an object
+    // changing between ascending and descending
+    const dir = ($("#filter-direction").val() === 'asc') ? 1 : -1;
+
+    // might be a property of an object
+    const dotIndex = property.indexOf('.');
     if (dotIndex > -1) {
       const ancestorProp = property.substr(0, dotIndex);
       const childProp = property.substr(dotIndex + 1, property.length);
       if (a[ancestorProp][childProp] === b[ancestorProp][childProp]) { return 0; }
-      return (a[ancestorProp][childProp] > b[ancestorProp][childProp]) ? 1 : -1;
+      return (a[ancestorProp][childProp] > b[ancestorProp][childProp]) ? dir : -dir;
     }
 
     // simple property comparing
     if (a[property] === b[property]) { return 0; }
-    return (a[property] > b[property]) ? 1 : -1;
+    return (a[property] > b[property]) ? dir : -dir;
   }
 
   setData(data) {
