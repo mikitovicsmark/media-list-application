@@ -1,11 +1,12 @@
 class MainModel {
   constructor() {
     this.data = [];
+    this.pollData();
   }
 
   getData() {
     return new Promise((resolve, reject) => {
-      window.$.ajax({
+      $.ajax({
         url: "http://146.185.158.18/fake_api.php",
         dataType: "jsonp",
         success: (response) => {
@@ -17,6 +18,17 @@ class MainModel {
           reject(err);
         }
       });
+    });
+  }
+
+  pollData() {
+    this.interval = $("#polling-interval").val();
+    clearTimeout(this.polling);
+    this.polling = setTimeout($.proxy(this.pollData, this), this.interval);
+    this.getData().then((data) => {
+      if (window.ctrl) {
+        window.ctrl.setData(data);
+      }
     });
   }
 }

@@ -1,6 +1,6 @@
 ({
   baseUrl: './',
-  name: 'mainPage',
+  name: 'main',
   out: 'build.js',
   paths: {
     es6: "../node_modules/requirejs-babel/es6",

@@ -24,12 +24,13 @@
           </select>
         </div>
         <div>
-          <input type="radio" name="filter" value="0">Live
-          <input type="radio" name="filter" value="1">Offline
-          <input type="radio" name="filter" value="3">Video
+          <input type="radio" name="filter-radio" value="0" checked="checked" onclick="ctrl.updateList()">All
+          <input type="radio" name="filter-radio" value="1" onclick="ctrl.updateList()">Live
+          <input type="radio" name="filter-radio" value="2" onclick="ctrl.updateList()">Offline
+          <input type="radio" name="filter-radio" value="3" onclick="ctrl.updateList()">Video
         </div>
         <div>
-          Polling interval: <input type="number" name="polling" value="5000">
+          Polling interval: <input id="polling-interval" type="number" value="5000">
         </div>
         <hr/>
         <div id="video-container"></div>

@@ -6,9 +6,29 @@ class MainController {
 
   updateList() {
     $('#video-container').empty();
+    const radioIndex = parseInt($('input[name=filter-radio]:checked').val());
     const sorted = this.data.sort(this.customSort)
     $.each(sorted, (index, val) => {
-      this.createVideoElement(index, val);
+      //filtering based on type / live attribute
+      switch(radioIndex) {
+        case 1:
+          if(val.isLive && val.type === 'channel') {
+            this.createVideoElement(index, val);
+          }
+          break;
+        case 2:
+          if(!val.isLive && val.type === 'channel') {
+            this.createVideoElement(index, val);
+          }
+          break;
+        case 3:
+          if(val.type === 'recorded') {
+            this.createVideoElement(index, val);
+          }
+          break;
+        default:
+          this.createVideoElement(index, val);
+      }
     });
   }
 
@@ -29,6 +49,7 @@ class MainController {
     $('#video-container').append($('<hr/>'));
   }
 
+  // filtering based on properties
   customSort(a, b) {
     const property = $("#filter-value").val();
 
@@ -51,6 +72,7 @@ class MainController {
 
   setData(data) {
     this.data = data;
+    this.updateList();
   }
 }
 
