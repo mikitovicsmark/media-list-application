@@ -33,18 +33,28 @@ class MainController {
   }
 
   createVideoElement(index, value) {
+    const checkedValue = {
+      id: value.id || 0,
+      type: value.type || '',
+      isLive: value.isLive || false,
+      title: value.title || '',
+      description: value.description || '',
+      viewers: value.viewers || 0,
+      picture: value.picture || '',
+      location: value.location || { country: '', city: '', coordinates: { latitude: '', longitude: '' }},
+      labels: value.labels || []
+    }
     // main video wrapper distinguished with ID
-    const elementId = `video-${value.id}`;
-
+    const elementId = `video-${checkedValue.id}`;
     $('#video-container').append(`<div id="${elementId}"/>`);
 
     // creating the html components for one object
     $(`#${elementId}`).append(`
-      <div class="video-title"> ${value.title} </div>
-      <img class="video-image" src="${value.picture}"/>
-      <div class="video-title">Viewers:  ${value.viewers} </div>
-      <div class="video-title"> ${value.description} </div>
-      <div class="video-title">Location: ${value.location.country} - ${value.location.city} </div>
+      <div class="video-title"> ${checkedValue.title} </div>
+      <img class="video-image" src="${checkedValue.picture}"/>
+      <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
+      <div class="video-title"> ${checkedValue.description} </div>
+      <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
       `);
     $('#video-container').append($('<hr/>'));
   }
