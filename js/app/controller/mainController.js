@@ -1,6 +1,7 @@
-class MainController {
+export class MainController {
   constructor(data) {
     this.data = data || [];
+    this.initLocalstorage();
     this.updateList();
   }
 
@@ -48,6 +49,14 @@ class MainController {
     const elementId = `video-${checkedValue.id}`;
     $('#video-container').append(`<div id="${elementId}"/>`);
 
+    // watchlist add or remove button
+    let watchlistButton = '';
+    if (this.isInWatchlist(checkedValue.id)) {
+      watchlistButton = `<button onclick="ctrl.removeFromWatchlist(${checkedValue.id})">Remove from watchlist &#10007;</button>`;
+    } else {
+      watchlistButton = `<button onclick="ctrl.addToWatchlist(${checkedValue.id})">Add to watchlist &#9733;</button>`;
+    }
+
     // creating the html components for one object
     $(`#${elementId}`).append(`
       <div class="video-title"> ${checkedValue.title} </div>
@@ -55,6 +64,7 @@ class MainController {
       <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
       <div class="video-title"> ${checkedValue.description} </div>
       <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
+      ${watchlistButton}
       `);
     $('#video-container').append($('<hr/>'));
   }
@@ -82,8 +92,55 @@ class MainController {
 
   setData(data) {
     this.data = data;
+    this.filterWatchList(this.data);
     this.updateList();
   }
-}
 
-export default MainController;
+  isInWatchlist(id) {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
+    const index = watchlist.indexOf(id)
+    return index > -1;
+  }
+
+  addToWatchlist(id) {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
+    if (watchlist.indexOf(id) === -1) {
+      watchlist.push(id);
+      localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    }
+    this.updateList();
+  }
+
+  removeFromWatchlist(id) {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
+    const index = watchlist.indexOf(id)
+    if(index > -1) {
+      watchlist.splice(index, 1);
+    }
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    this.updateList();
+  }
+
+  // check if localstorage.watchlist is null
+  initLocalstorage() {
+    if (!localStorage.getItem("watchlist")) {
+      const watchlist = [];
+      watchlist.push(JSON.parse(localStorage.getItem('watchlist')));
+      localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    }
+  }
+
+  // delete items from watchlist, if not present in API data
+  filterWatchList(data) {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
+    const dataIdArray = [];
+    data.forEach((mediaItem) => {
+      dataIdArray.push(mediaItem.id);
+    })
+    const filteredWatchlist = watchlist.filter((id) => {
+      return dataIdArray.indexOf(id) != -1;
+    });
+    localStorage.setItem('watchlist', JSON.stringify(filteredWatchlist));
+  }
+
+}

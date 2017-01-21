@@ -1,5 +1,5 @@
-import MainController from 'app/controller/mainController';
-import MainModel from 'app/model/mainModel';
+import { MainController } from 'app/controller/mainController';
+import { MainModel } from 'app/model/mainModel';
 import $ from 'jquery';
 import jQuery from 'jquery';
 

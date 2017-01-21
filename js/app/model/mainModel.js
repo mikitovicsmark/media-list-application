@@ -1,4 +1,4 @@
-class MainModel {
+export class MainModel {
   constructor() {
     this.data = [];
     this.pollData();
@@ -32,5 +32,3 @@ class MainModel {
     });
   }
 }
-
-export default MainModel;
