@@ -4,7 +4,7 @@
   "description": "",
   "main": "/scripts/main.js",
   "scripts": {
-    "test": "test",
+    "test": "mocha --require babel-polyfill --compilers js:babel-register",
     "build": "r.js -o js/common.js"
   },
   "repository": {
@@ -18,9 +18,13 @@
   },
   "homepage": "https://github.com/mikitovicsmark/media-list-application#readme",
   "devDependencies": {
+    "babel-polyfill": "^6.22.0",
     "babel-preset-env": "^1.1.8",
+    "babel-register": "^6.22.0",
     "jquery": "^3.1.1",
+    "mocha": "^3.2.0",
     "requirejs": "^2.3.2",
-    "requirejs-babel": "0.0.9"
+    "requirejs-babel": "0.0.9",
+    "sinon": "^1.17.7"
   }
 }

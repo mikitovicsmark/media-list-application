@@ -22,7 +22,7 @@ export class MainModel {
   }
 
   pollData() {
-    this.interval = $("#polling-interval").val();
+    this.interval = this.getPollingInverval();
     clearTimeout(this.polling);
     this.polling = setTimeout($.proxy(this.pollData, this), this.interval);
     this.getData().then((data) => {
@@ -30,5 +30,9 @@ export class MainModel {
         window.ctrl.setData(data);
       }
     });
+  }
+
+  getPollingInverval() {
+    return $("#polling-interval").val();
   }
 }

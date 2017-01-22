@@ -1,39 +1,44 @@
+import { JqueryUtil } from '../util/jqueryUtil';
+import { LocalStorageUtil } from '../util/localStorageUtil';
+
 export class MainController {
   constructor(data) {
+    this.jqueryUtil = new JqueryUtil();
+    this.localStorageUtil = new LocalStorageUtil();
     this.data = data || [];
-    this.initLocalstorage();
+    this.localStorageUtil.initLocalstorage();
     this.updateList();
   }
 
   updateList() {
-    $('#video-container').empty();
-    const radioIndex = parseInt($('input[name=filter-radio]:checked').val());
-    const sorted = this.data.sort(this.customSort)
-    $.each(sorted, (index, val) => {
+    this.jqueryUtil.clearVideoContainer();
+    const radioIndex = this.jqueryUtil.getRadioIndex();
+    const sorted = this.data.sort(this.customSort.bind(this))
+    sorted.forEach((val) => {
       //filtering based on type / live attribute
       switch(radioIndex) {
         case 1:
           if(val.isLive && val.type === 'channel') {
-            this.createVideoElement(index, val);
+            this.createVideoElement(val);
           }
           break;
         case 2:
           if(!val.isLive && val.type === 'channel') {
-            this.createVideoElement(index, val);
+            this.createVideoElement(val);
           }
           break;
         case 3:
           if(val.type === 'recorded') {
-            this.createVideoElement(index, val);
+            this.createVideoElement(val);
           }
           break;
         default:
-          this.createVideoElement(index, val);
+          this.createVideoElement(val);
       }
     });
   }
 
-  createVideoElement(index, value) {
+  createVideoElement(value) {
     const checkedValue = {
       id: value.id || 0,
       type: value.type || '',
@@ -47,34 +52,35 @@ export class MainController {
     }
     // main video wrapper distinguished with ID
     const elementId = `video-${checkedValue.id}`;
-    $('#video-container').append(`<div id="${elementId}"/>`);
+    this.jqueryUtil.appendTo('#video-container', `<div id="${elementId}"/>`);
 
     // watchlist add or remove button
     let watchlistButton = '';
-    if (this.isInWatchlist(checkedValue.id)) {
+    if (this.localStorageUtil.isInWatchlist(checkedValue.id)) {
       watchlistButton = `<button onclick="ctrl.removeFromWatchlist(${checkedValue.id})">Remove from watchlist &#10007;</button>`;
     } else {
       watchlistButton = `<button onclick="ctrl.addToWatchlist(${checkedValue.id})">Add to watchlist &#9733;</button>`;
     }
 
     // creating the html components for one object
-    $(`#${elementId}`).append(`
+    const mediaTemplate = `
       <div class="video-title"> ${checkedValue.title} </div>
       <img class="video-image" src="${checkedValue.picture}"/>
       <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
       <div class="video-title"> ${checkedValue.description} </div>
       <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
       ${watchlistButton}
-      `);
-    $('#video-container').append($('<hr/>'));
+      `;
+    this.jqueryUtil.appendTo(`#${elementId}`, mediaTemplate);
+    this.jqueryUtil.appendTo('#video-container', '<hr/>');
   }
 
   // filtering based on properties
   customSort(a, b) {
-    const property = $("#filter-value").val();
+    const property = this.jqueryUtil.getFilterProperty();
 
     // changing between ascending and descending
-    const dir = ($("#filter-direction").val() === 'asc') ? 1 : -1;
+    const dir = this.jqueryUtil.getSortDirection();
 
     // might be a property of an object
     const dotIndex = property.indexOf('.');
@@ -92,55 +98,18 @@ export class MainController {
 
   setData(data) {
     this.data = data;
-    this.filterWatchList(this.data);
+    this.localStorageUtil.filterWatchList(this.data);
     this.updateList();
   }
 
-  isInWatchlist(id) {
-    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    const index = watchlist.indexOf(id)
-    return index > -1;
-  }
-
   addToWatchlist(id) {
-    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    if (watchlist.indexOf(id) === -1) {
-      watchlist.push(id);
-      localStorage.setItem('watchlist', JSON.stringify(watchlist));
-    }
+    this.localStorageUtil.addToWatchlist(id);
     this.updateList();
   }
 
   removeFromWatchlist(id) {
-    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    const index = watchlist.indexOf(id)
-    if(index > -1) {
-      watchlist.splice(index, 1);
-    }
-    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    this.localStorageUtil.removeFromWatchlist(id);
     this.updateList();
-  }
-
-  // check if localstorage.watchlist is null
-  initLocalstorage() {
-    if (!localStorage.getItem("watchlist")) {
-      const watchlist = [];
-      watchlist.push(JSON.parse(localStorage.getItem('watchlist')));
-      localStorage.setItem('watchlist', JSON.stringify(watchlist));
-    }
-  }
-
-  // delete items from watchlist, if not present in API data
-  filterWatchList(data) {
-    const watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    const dataIdArray = [];
-    data.forEach((mediaItem) => {
-      dataIdArray.push(mediaItem.id);
-    })
-    const filteredWatchlist = watchlist.filter((id) => {
-      return dataIdArray.indexOf(id) != -1;
-    });
-    localStorage.setItem('watchlist', JSON.stringify(filteredWatchlist));
   }
 
 }
