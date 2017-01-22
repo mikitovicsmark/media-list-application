@@ -3,8 +3,8 @@ export class JqueryUtil {
     $('#video-container').empty();
   }
 
-  getRadioIndex() {
-    return parseInt($('input[name=filter-radio]:checked').val());
+  getRadioValue() {
+    return $('input[name=filter-radio]:checked').val();
   }
 
   appendTo(parent, child) {

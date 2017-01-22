@@ -1,10 +1,7 @@
-import { JqueryUtil } from '../util/jqueryUtil';
-import { LocalStorageUtil } from '../util/localStorageUtil';
-
 export class MainController {
-  constructor(data) {
-    this.jqueryUtil = new JqueryUtil();
-    this.localStorageUtil = new LocalStorageUtil();
+  constructor(data, utils) {
+    this.jqueryUtil = utils.jqueryUtil;
+    this.localStorageUtil = utils.localStorageUtil;
     this.data = data || [];
     this.localStorageUtil.initLocalstorage();
     this.updateList();
@@ -12,22 +9,22 @@ export class MainController {
 
   updateList() {
     this.jqueryUtil.clearVideoContainer();
-    const radioIndex = this.jqueryUtil.getRadioIndex();
+    const radioIndex = this.jqueryUtil.getRadioValue();
     const sorted = this.data.sort(this.customSort.bind(this))
     sorted.forEach((val) => {
       //filtering based on type / live attribute
       switch(radioIndex) {
-        case 1:
+        case 'live':
           if(val.isLive && val.type === 'channel') {
             this.createVideoElement(val);
           }
           break;
-        case 2:
+        case 'offline':
           if(!val.isLive && val.type === 'channel') {
             this.createVideoElement(val);
           }
           break;
-        case 3:
+        case 'video':
           if(val.type === 'recorded') {
             this.createVideoElement(val);
           }
