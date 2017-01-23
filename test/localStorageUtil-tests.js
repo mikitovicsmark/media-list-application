@@ -55,20 +55,4 @@ describe('LocalStorageUtil tests', () => {
     });
 
   });
-  /*
-  it('filter by property, ascending', () => {
-    assert.equal(mainController.customSort(a, b), -1, 'Ascending title');
-  });
-
-  it('filter by property, ascending', () => {
-    assert.equal(mainController.customSort(a, b), -1, 'Ascending title');
-  });
-
-  it('filter by property, ascending', () => {
-    assert.equal(mainController.customSort(a, b), -1, 'Ascending title');
-  });
-
-  it('filter by property, ascending', () => {
-    assert.equal(mainController.customSort(a, b), -1, 'Ascending title');
-  });*/
 });
