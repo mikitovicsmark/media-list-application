@@ -7,9 +7,10 @@ import { MainModel } from '../js/app/model/mainModel';
 import { JqueryUtil } from '../js/app/util/jqueryUtil';
 import { LocalStorageUtil } from '../js/app/util/localStorageUtil';
 
-import { testData } from './testData'
+import { testData } from './testData';
 
 let store = {};
+
 global.localStorage = {
   getItem: (key) => {
     return store[key];
@@ -20,22 +21,25 @@ global.localStorage = {
   clear: () => {
     store = {};
   }
-}
+};
 
 
-describe('MainControllerTests', () => {
+describe('MainController tests', () => {
+  const fakeJqueryUtil = new JqueryUtil();
   beforeEach(() => {
     localStorage.clear();
   });
-  const fakeJqueryUtil = new JqueryUtil();
 
   describe('Constructor without data', () => {
-    let util, sandbox, clearStub, radioStub;
+    let util, sandbox, clearStub, radioStub, filterStub, directionStub, appendStub;
 
     before(() => {
       sandbox = sinon.sandbox.create();
       clearStub = sandbox.stub(fakeJqueryUtil, 'clearVideoContainer');
       radioStub = sandbox.stub(fakeJqueryUtil, 'getRadioValue');
+      filterStub = sandbox.stub(fakeJqueryUtil, 'getFilterProperty', () => 'id');
+      directionStub = sandbox.stub(fakeJqueryUtil, 'getSortDirection', () => 1);
+      appendStub = sandbox.stub(fakeJqueryUtil, 'appendTo');
       util = {
         jqueryUtil: fakeJqueryUtil,
         localStorageUtil: new LocalStorageUtil()
@@ -46,10 +50,14 @@ describe('MainControllerTests', () => {
       sandbox.restore();
     });
 
-    it('should create a controller', () => {
+    it('should create a controller and set data later', () => {
       const mainController = new MainController('', util);
       assert(mainController);
       assert.deepEqual(mainController.data, []);
+
+      let dataCopy = JSON.parse(JSON.stringify(testData));
+      mainController.setData(dataCopy);
+      assert.deepEqual(mainController.data, dataCopy);
     });
 
     it('should throw an error if utils are not defined', () => {
@@ -80,8 +88,9 @@ describe('MainControllerTests', () => {
     });
 
     it('should create a controller with data', () => {
-      const mainController = new MainController(testData, util);
-      assert.deepEqual(mainController.data, testData);
+      let dataCopy = JSON.parse(JSON.stringify(testData));
+      const mainController = new MainController(dataCopy, util);
+      assert.deepEqual(mainController.data, dataCopy);
       sinon.assert.calledOnce(clearStub);
       sinon.assert.calledOnce(radioStub);
 
@@ -94,6 +103,8 @@ describe('MainControllerTests', () => {
     let util, sandbox, clearStub, radioStub, filterStub, directionStub, appendStub;
 
     let mainController;
+
+    let dataCopy = JSON.parse(JSON.stringify(testData));
 
     before(() => {
       sandbox = sinon.sandbox.create();
@@ -121,23 +132,25 @@ describe('MainControllerTests', () => {
     });
 
     it('create only live media entries', () => {
-      mainController = new MainController(testData, util);
+      mainController = new MainController(dataCopy, util);
       sinon.assert.callCount(appendStub, 6);
     });
 
     it('create only offline media entries', () => {
-      mainController = new MainController(testData, util);
+      mainController = new MainController(dataCopy, util);
       sinon.assert.notCalled(appendStub);
     });
 
     it('create only video media entries', () => {
-      mainController = new MainController(testData, util);
+      mainController = new MainController(dataCopy, util);
       sinon.assert.calledThrice(appendStub);
     });
   });
 
   describe('CustomSort', () => {
     let util, sandbox, clearStub, radioStub, filterStub, directionStub;
+
+    let mainController, a, b;
 
     before(() => {
       sandbox = sinon.sandbox.create();
@@ -164,22 +177,30 @@ describe('MainControllerTests', () => {
       }
     });
 
+    beforeEach(() => {
+      mainController = new MainController('', util);
+      let dataCopy = JSON.parse(JSON.stringify(testData));
+      a = dataCopy[0];
+      b = dataCopy[1];
+    })
+
     after(() => {
       sandbox.restore();
     });
 
-    it('filter media elements by properties', () => {
-      const mainController = new MainController('', util);
-
-      const a = testData[0];
-      const b = testData[1];
-
-      console.log(a.id, b.id)
-
+    it('filter by property, ascending', () => {
       assert.equal(mainController.customSort(a, b), -1, 'Ascending title');
+    });
+    it('filter by property, descending', () => {
       assert.equal(mainController.customSort(a, b), 1, 'Descending title');
-      assert.equal(mainController.customSort(a, b), -1, 'Descending id');
+    });
+    it('filter by number, descending', () => {
+      assert.equal(mainController.customSort(a, b), 1, 'Descending id');
+    });
+    it('equal properties', () => {
       assert.equal(mainController.customSort(a, b), 0, 'Ascending description (equal)');
+    });
+    it('filter by property of an object', () => {
       assert.equal(mainController.customSort(a, b), 1, 'Ascending location.country');
     });
   });
