@@ -12,10 +12,14 @@ export class JqueryUtil {
   }
 
   getFilterProperty() {
-    return $("#filter-value").val();
+    return $('#filter-value').val();
   }
 
   getSortDirection() {
-    return ($("#filter-direction").val() === 'asc') ? 1 : -1;
+    return ($('#filter-direction').val() === 'asc') ? 1 : -1;
+  }
+
+  getPollingInverval() {
+    return $('#polling-interval').val();
   }
 }

@@ -1,20 +1,20 @@
 export class MainModel {
-  constructor() {
+  constructor(jqueryUtil) {
+    this.jqueryUtil = jqueryUtil;
     this.data = [];
-    this.pollData();
   }
 
   getData() {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: "http://146.185.158.18/fake_api.php",
-        dataType: "jsonp",
+        url: 'http://146.185.158.18/fake_api.php',
+        dataType: 'jsonp',
         success: (response) => {
           this.data = response;
           return resolve(this.data);
         },
         error: (err) => {
-          alert("Could not retrieve media list.");
+          alert('Could not retrieve media list.');
           reject(err);
         }
       });
@@ -22,7 +22,7 @@ export class MainModel {
   }
 
   pollData() {
-    this.interval = this.getPollingInverval();
+    this.interval = this.jqueryUtil.getPollingInverval();
     clearTimeout(this.polling);
     this.polling = setTimeout($.proxy(this.pollData, this), this.interval);
     this.getData().then((data) => {
@@ -30,9 +30,5 @@ export class MainModel {
         window.ctrl.setData(data);
       }
     });
-  }
-
-  getPollingInverval() {
-    return $("#polling-interval").val();
   }
 }

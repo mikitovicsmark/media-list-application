@@ -13,9 +13,10 @@ class MainClass {
       jqueryUtil: new JqueryUtil(),
       localStorageUtil: new LocalStorageUtil()
     }
-    window.model = new MainModel();
+    window.model = new MainModel(utils.jqueryUtil);
     window.model.getData().then((data) => {
       window.ctrl = new MainController(data, utils);
+      window.model.pollData();
     });
   }
 }
