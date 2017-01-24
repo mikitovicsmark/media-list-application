@@ -1,11 +1,11 @@
+import $ from 'jquery';
+import jQuery from 'jquery';
+
 import { MainController } from 'app/controller/mainController';
 import { MainModel } from 'app/model/mainModel';
 
 import { JqueryUtil } from 'app/util/jqueryUtil';
 import { LocalStorageUtil } from 'app/util/localStorageUtil';
-
-import $ from 'jquery';
-import jQuery from 'jquery';
 
 class MainClass {
   constructor() {

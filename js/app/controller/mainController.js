@@ -47,9 +47,21 @@ export class MainController {
       location: value.location || { country: '', city: '', coordinates: { latitude: '', longitude: '' }},
       labels: value.labels || []
     }
+
     // main video wrapper distinguished with ID
     const elementId = `video-${checkedValue.id}`;
-    this.jqueryUtil.appendTo('#video-container', `<div id="${elementId}"/>`);
+
+    let r = Math.floor(Math.random() * 255);
+    let g = Math.floor(Math.random() * 255);
+    let b = Math.floor(Math.random() * 255);
+
+    this.jqueryUtil.appendTo('#video-container', `<div style="
+      width: 20%;
+      display: block;
+      float: left;
+      height: 300px;
+      background-color: rgb(${r},${g},${b});
+      " id="${elementId}"/>`);
 
     // watchlist add or remove button
     let watchlistButton = '';
@@ -61,16 +73,28 @@ export class MainController {
 
     // creating the html components for one object
     const mediaTemplate = `
-      <div class="video-title"> ${checkedValue.title} </div>
-      <img class="video-image" src="${checkedValue.picture}"/>
-      <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
-      <div class="video-title"> ${checkedValue.description} </div>
-      <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
+      <div id="f1_container">
+      <div id="f1_card" class="shadow">
+        <div class="front face">
+          <img class="video-image" src="${checkedValue.picture}"/>
+        </div>
+        <div class="back face center">
+          <p>${checkedValue.description}</p>
+        </div>
+      </div>
+      </div>
+
       ${watchlistButton}
       `;
     this.jqueryUtil.appendTo(`#${elementId}`, mediaTemplate);
-    this.jqueryUtil.appendTo('#video-container', '<hr/>');
   }
+  /*
+      <div class="video-title"> ${checkedValue.title} </div>
+      
+      <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
+      <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
+      <div class="video-title"> ${checkedValue.description} </div> 
+         */
 
   // filtering based on properties
   customSort(a, b) {
@@ -107,6 +131,10 @@ export class MainController {
   removeFromWatchlist(id) {
     this.localStorageUtil.removeFromWatchlist(id);
     this.updateList();
+  }
+
+  restartPoll() {
+    window.model.pollData();
   }
 
 }

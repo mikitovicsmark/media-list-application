@@ -1,39 +1,50 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>My Sample Project</title>
+    <head> 
+        <link rel="stylesheet" type="text/css" href="js/app/app.css">
+        <title>Media list</title>
     </head>
-    <body>
-        <h1>My Sample Project</h1>
-        <div>
-          Filter by: 
-          <select id="filter-value" onchange="ctrl.updateList()">
-            <option value="id">ID</option>
-            <option value="type">Type</option>
-            <option value="isLive">Live</option>
-            <option value="title" selected="selected">Title</option>
-            <option value="description">Description</option>
-            <option value="viewers">Viewers</option>
-            <option value="picture">Picture</option>
-            <option value="location.country">Country</option>
-            <option value="location.city">City</option>          
-          </select>
-          <select id="filter-direction" onchange="ctrl.updateList()">
-            <option value="asc" selected="selected">Ascending</option>
-            <option value="desc">Descending</option>         
-          </select>
+    <body style="padding: 10%;">
+        <div style="position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 80%;
+            background-color: white;
+            padding-left: 10%;
+            z-index: 2;">
+          <div style="display: inline-block; width: 100%">
+          <h1>Media list application</h1>
+          <div style="display: inline-block; width: 33%;">
+            Filter by: 
+            <select id="filter-value" onchange="ctrl.updateList()">
+              <option value="id">ID</option>
+              <option value="type">Type</option>
+              <option value="isLive">Live</option>
+              <option value="title" selected="selected">Title</option>
+              <option value="description">Description</option>
+              <option value="viewers">Viewers</option>
+              <option value="picture">Picture</option>
+              <option value="location.country">Country</option>
+              <option value="location.city">City</option>          
+            </select>
+            <select id="filter-direction" onchange="ctrl.updateList()">
+              <option value="asc" selected="selected">Ascending</option>
+              <option value="desc">Descending</option>         
+            </select>
+          </div>
+          <div style="display: inline-block; width: 33%;">
+            <input type="radio" name="filter-radio" value="all" checked="checked" onclick="ctrl.updateList()">All
+            <input type="radio" name="filter-radio" value="live" onclick="ctrl.updateList()">Live
+            <input type="radio" name="filter-radio" value="offline" onclick="ctrl.updateList()">Offline
+            <input type="radio" name="filter-radio" value="video" onclick="ctrl.updateList()">Video
+          </div>
+          <div style="display: inline-block; width: 33%;">
+            Polling interval: <input id="polling-interval" type="number" value="5000" onchange="ctrl.restartPoll()">
+          </div>
+          <hr/>
+          </div>
         </div>
-        <div>
-          <input type="radio" name="filter-radio" value="all" checked="checked" onclick="ctrl.updateList()">All
-          <input type="radio" name="filter-radio" value="live" onclick="ctrl.updateList()">Live
-          <input type="radio" name="filter-radio" value="offline" onclick="ctrl.updateList()">Offline
-          <input type="radio" name="filter-radio" value="video" onclick="ctrl.updateList()">Video
-        </div>
-        <div>
-          Polling interval: <input id="polling-interval" type="number" value="5000">
-        </div>
-        <hr/>
-        <div id="video-container"></div>
+        <div style="" id="video-container"></div>
         <script src="node_modules/requirejs/require.js"></script>
         <script src="js/build.js"></script>
     </body>
