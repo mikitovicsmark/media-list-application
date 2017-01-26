@@ -26,7 +26,7 @@ describe('LocalStorageUtil tests', () => {
 
   it('should initialize localStorage and clear it', () => {
     localStorageUtil.initLocalstorage();
-    assert.deepEqual(store, { watchlist: "[]"});
+    assert.deepEqual(store, { watchlist: '[]' });
   });
   describe('function tests', () => {
     beforeEach(() => {
@@ -37,7 +37,8 @@ describe('LocalStorageUtil tests', () => {
     it('should add and remove items properly', () => {
       localStorageUtil.addToWatchlist(1);
       localStorageUtil.addToWatchlist(2);
-      assert.deepEqual(store, { watchlist: "[1,2]"});
+      assert.deepEqual(store, { watchlist: '[1,2]'});
+      assert.deepEqual(store, { watchlist: JSON.stringify(localStorageUtil.getWatchlist()) });
 
       assert(localStorageUtil.isInWatchlist(1));
 
@@ -50,8 +51,8 @@ describe('LocalStorageUtil tests', () => {
       localStorageUtil.addToWatchlist(1);
       localStorageUtil.addToWatchlist(2);
       localStorageUtil.addToWatchlist(3);
-      localStorageUtil.filterWatchList([{ id: 1 }, { id: 2 }]);
-      assert.deepEqual(store, { watchlist: "[1,2]"});
+      localStorageUtil.filterWatchlist([{ id: 1 }, { id: 2 }]);
+      assert.deepEqual(store, { watchlist: '[1,2]' });
     });
 
   });

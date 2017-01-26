@@ -19,7 +19,10 @@
               <option value="viewers">Viewers</option>
               <option value="picture">Picture</option>
               <option value="location.country">Country</option>
-              <option value="location.city">City</option>          
+              <option value="location.city">City</option>
+              <option value="labels">Labels</option>
+              <option value="location.coordinates.latitude">Latitude</option>
+              <option value="location.coordinates.longitude">Longitude</option>
             </select>
             <select id="filter-direction" class="setting smaller-width" onchange="ctrl.updateList()">
               <option value="asc" selected="selected">Ascending</option>
@@ -33,12 +36,17 @@
             <input type="radio" name="filter-radio" value="video" onclick="ctrl.updateList()">Video
           </div>
           <div class="header-setting">
-            Polling interval: <input id="polling-interval" class="setting smaller-width" type="number" value="5000" onchange="ctrl.restartPoll()"> ms.
+            Polling interval: <input id="polling-interval" class="setting smaller-width" type="number" value="30000" onchange="ctrl.restartPoll()"> ms.
           </div>
           <hr/>
           </div>
         </div>
-        <div style="" id="video-container"></div>
+        <div class="watchlist-title">
+          Watchlist
+          <ul id="watchlist" class="watchlist">
+          </ul>
+        </div>
+        <div id="video-container"></div>
         <script src="node_modules/requirejs/require.js"></script>
         <script src="js/build.js"></script>
     </body>

@@ -31,7 +31,7 @@ export class LocalStorageUtil {
   }
 
   // delete items from watchlist, if not present in API data
-  filterWatchList(data) {
+  filterWatchlist(data) {
     const watchlist = JSON.parse(localStorage.getItem('watchlist'));
     const dataIdArray = [];
     data.forEach((mediaItem) => {
@@ -41,5 +41,9 @@ export class LocalStorageUtil {
       return dataIdArray.indexOf(id) != -1;
     });
     localStorage.setItem('watchlist', JSON.stringify(filteredWatchlist));
+  }
+
+  getWatchlist() {
+    return JSON.parse(localStorage.getItem('watchlist'));
   }
 }

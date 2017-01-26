@@ -1,6 +1,6 @@
 export class JqueryUtil {
-  clearVideoContainer() {
-    $('#video-container').empty();
+  clearContainer(container) {
+    $(`#${container}`).empty();
   }
 
   getRadioValue() {
@@ -24,11 +24,19 @@ export class JqueryUtil {
   }
 
   toggleDetail(id) {
-    const element = $(`#video-${id} > div > div`);
-    if (element.hasClass('turned')) {
-      element.removeClass('turned');
+    const card = $(`#video-${id} > div > div`);
+    card.toggleClass('turned');
+  }
+
+  updateWatchlist(labelArray) {
+    this.clearContainer('watchlist');
+    if (labelArray.length === 0) {
+      this.appendTo('#watchlist', `<li>Empty list</li>`);
     } else {
-      element.addClass('turned');
+      const labels = labelArray.sort();
+      labels.forEach((label) => {
+        this.appendTo('#watchlist', `<li>${label}</li>`);
+      });
     }
   }
 }

@@ -35,7 +35,7 @@ describe('MainController tests', () => {
 
     before(() => {
       sandbox = sinon.sandbox.create();
-      clearStub = sandbox.stub(fakeJqueryUtil, 'clearVideoContainer');
+      clearStub = sandbox.stub(fakeJqueryUtil, 'clearContainer');
       radioStub = sandbox.stub(fakeJqueryUtil, 'getRadioValue');
       filterStub = sandbox.stub(fakeJqueryUtil, 'getFilterProperty', () => 'id');
       directionStub = sandbox.stub(fakeJqueryUtil, 'getSortDirection', () => 1);
@@ -60,6 +60,12 @@ describe('MainController tests', () => {
       assert.deepEqual(mainController.data, dataCopy);
     });
 
+    it('should call create watchlist without problem', () => {
+      const mainController = new MainController('', util);
+      mainController.updateWatchlist();
+      sinon.assert.called(appendStub);
+    });
+
     it('should throw an error if utils are not defined', () => {
       assert.throws(() => {
         const mainController = new MainController();
@@ -72,7 +78,7 @@ describe('MainController tests', () => {
 
     before(() => {
       sandbox = sinon.sandbox.create();
-      clearStub = sandbox.stub(fakeJqueryUtil, 'clearVideoContainer');
+      clearStub = sandbox.stub(fakeJqueryUtil, 'clearContainer');
       radioStub = sandbox.stub(fakeJqueryUtil, 'getRadioValue');
       filterStub = sandbox.stub(fakeJqueryUtil, 'getFilterProperty', () => 'title');
       directionStub = sandbox.stub(fakeJqueryUtil, 'getSortDirection', () => 1);
@@ -91,11 +97,10 @@ describe('MainController tests', () => {
       let dataCopy = JSON.parse(JSON.stringify(testData));
       const mainController = new MainController(dataCopy, util);
       assert.deepEqual(mainController.data, dataCopy);
-      sinon.assert.calledOnce(clearStub);
+      sinon.assert.calledTwice(clearStub);
       sinon.assert.calledOnce(radioStub);
 
-      // 2 appendTo call per createVideoElement
-      sinon.assert.callCount(appendStub, mainController.data.length * 2);
+      sinon.assert.called(appendStub);
     });
   });
 
@@ -108,7 +113,7 @@ describe('MainController tests', () => {
 
     before(() => {
       sandbox = sinon.sandbox.create();
-      clearStub = sandbox.stub(fakeJqueryUtil, 'clearVideoContainer');
+      clearStub = sandbox.stub(fakeJqueryUtil, 'clearContainer');
       filterStub = sandbox.stub(fakeJqueryUtil, 'getFilterProperty', () => 'title');
       directionStub = sandbox.stub(fakeJqueryUtil, 'getSortDirection', () => 1);
       appendStub = sandbox.stub(fakeJqueryUtil, 'appendTo');
@@ -133,29 +138,36 @@ describe('MainController tests', () => {
 
     it('create only live media entries', () => {
       mainController = new MainController(dataCopy, util);
-      sinon.assert.callCount(appendStub, 4);
+
+      // 2*2 live media, 1 empty watchlist 
+      sinon.assert.callCount(appendStub, 5);
     });
 
     it('create only offline media entries', () => {
       mainController = new MainController(dataCopy, util);
-      sinon.assert.notCalled(appendStub);
+
+      // 1 empty watchlist
+      sinon.assert.calledOnce(appendStub);
     });
 
     it('create only video media entries', () => {
       mainController = new MainController(dataCopy, util);
-      sinon.assert.calledTwice(appendStub);
+
+      // 1*2 for video media, 1 empty watchlist
+      sinon.assert.calledThrice(appendStub);
     });
   });
 
   describe('CustomSort', () => {
-    let util, sandbox, clearStub, radioStub, filterStub, directionStub;
+    let util, sandbox, clearStub, radioStub, appendStub, filterStub, directionStub;
 
     let mainController, a, b;
 
     before(() => {
       sandbox = sinon.sandbox.create();
-      clearStub = sandbox.stub(fakeJqueryUtil, 'clearVideoContainer');
+      clearStub = sandbox.stub(fakeJqueryUtil, 'clearContainer');
       radioStub = sandbox.stub(fakeJqueryUtil, 'getRadioValue');
+      appendStub = sandbox.stub(fakeJqueryUtil, 'appendTo');
 
       filterStub = sandbox.stub(fakeJqueryUtil, 'getFilterProperty');
       directionStub = sandbox.stub(fakeJqueryUtil, 'getSortDirection');
@@ -165,11 +177,13 @@ describe('MainController tests', () => {
       filterStub.onCall(2).returns('id');
       filterStub.onCall(3).returns('description');
       filterStub.onCall(4).returns('location.country');
+      filterStub.onCall(5).returns('location.coordinates.latitude');
       directionStub.onCall(0).returns(1); // ascending
       directionStub.onCall(1).returns(-1); // descending
       directionStub.onCall(2).returns(-1);
       directionStub.onCall(3).returns(1);
       directionStub.onCall(4).returns(1);
+      directionStub.onCall(5).returns(1);
 
       util = {
         jqueryUtil: fakeJqueryUtil,
@@ -202,6 +216,9 @@ describe('MainController tests', () => {
     });
     it('filter by property of an object', () => {
       assert.equal(mainController.customSort(a, b), 1, 'Ascending location.country');
+    });
+    it('filter by coordinates', () => {
+      assert.equal(mainController.customSort(a, b), -1, 'Ascending latitude');
     });
   });
 });

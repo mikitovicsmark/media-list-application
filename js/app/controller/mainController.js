@@ -8,7 +8,8 @@ export class MainController {
   }
 
   updateList() {
-    this.jqueryUtil.clearVideoContainer();
+    this.jqueryUtil.clearContainer('video-container');
+    this.updateWatchlist();
     const radioIndex = this.jqueryUtil.getRadioValue();
     const sorted = this.data.sort(this.customSort.bind(this))
     sorted.forEach((val) => {
@@ -36,7 +37,7 @@ export class MainController {
   }
 
   createVideoElement(value) {
-    const checkedValue = {
+    let checkedValue = {
       id: value.id || 0,
       type: value.type || '',
       isLive: value.isLive || false,
@@ -45,16 +46,23 @@ export class MainController {
       viewers: value.viewers || 0,
       picture: value.picture || 'http:\/\/placehold.it\/32x32',
       location: value.location || { country: '', city: '', coordinates: { latitude: '', longitude: '' }},
-      labels: value.labels || []
+      labels: value.labels || [],
+    };
+
+    if (value.coordinates) {
+      checkedValue.coordinates = {
+        longitude: value.coordinates.longitude || 0,
+        latitude: value.coordinates.latitude || 0
+      }
+    } else {
+      checkedValue.coordinates = {
+        latitude: 0,
+        longitude: 0
+      }
     }
 
     // main video wrapper distinguished with ID
     const elementId = `video-${checkedValue.id}`;
-
-    let r = Math.floor(Math.random() * 255);
-    let g = Math.floor(Math.random() * 255);
-    let b = Math.floor(Math.random() * 255);
-
     this.jqueryUtil.appendTo('#video-container', `<div class="media-item" id="${elementId}"/>`);
 
     // watchlist add or remove button
@@ -101,9 +109,21 @@ export class MainController {
     const dotIndex = property.indexOf('.');
     if (dotIndex > -1) {
       const ancestorProp = property.substr(0, dotIndex);
-      const childProp = property.substr(dotIndex + 1, property.length);
+      let childProp = property.substr(dotIndex + 1, property.length);
+
+      // check if it is another objec (lat, lng)
+      const secondDotIndex = childProp.indexOf('.');
+      if (secondDotIndex > -1) {
+        const secondChildProp = childProp.substr(secondDotIndex + 1, property.length);
+        childProp = property.substr(dotIndex + 1, secondDotIndex);
+
+        if (a[ancestorProp][childProp][secondChildProp] === b[ancestorProp][childProp][secondChildProp]) { return 0; }
+        return a[ancestorProp][childProp][secondChildProp] > b[ancestorProp][childProp][secondChildProp] ? dir : -dir;
+      }
+
+      // country, city comparison
       if (a[ancestorProp][childProp] === b[ancestorProp][childProp]) { return 0; }
-      return (a[ancestorProp][childProp] > b[ancestorProp][childProp]) ? dir : -dir;
+      return (a[ancestorProp][childProp] > b[ancestorProp][childProp]) ? dir : -dir;     
     }
 
     // simple property comparing
@@ -113,7 +133,7 @@ export class MainController {
 
   setData(data) {
     this.data = data;
-    this.localStorageUtil.filterWatchList(this.data);
+    this.localStorageUtil.filterWatchlist(this.data);
     this.updateList();
   }
 
@@ -133,6 +153,17 @@ export class MainController {
 
   toggleDetail(id) {
     this.jqueryUtil.toggleDetail(id);
+  }
+
+  updateWatchlist() {
+   const watchlistIdArray = this.localStorageUtil.getWatchlist();
+   const watchlistLabels = [];
+   this.data.forEach((mediaItem) => {
+    if (watchlistIdArray.indexOf(mediaItem.id) > -1) {
+      watchlistLabels.push(mediaItem.title);
+    }
+   });
+   this.jqueryUtil.updateWatchlist(watchlistLabels);
   }
 
 }
