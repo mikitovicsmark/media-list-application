@@ -74,6 +74,14 @@ body {
   color: white;
   text-align: center;
   background-color: #1A237E;
+  overflow: hidden;
+  text-overflow: ellipsis;  
+}
+
+@media screen and (max-width: 1350px) {
+  .card.back {
+    font-size: 12px;
+  }
 }
 
 .media-item {
