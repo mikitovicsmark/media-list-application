@@ -52,11 +52,11 @@ body {
   transform-style: preserve-3d;
   transition: all 0.6s linear;
 }
-/*
-.media-container:hover .media-card {
+
+.turned {
   transform: rotateY(180deg);
 }
-*/
+
 .card {
   position: absolute;
   width: 100%;
@@ -71,7 +71,7 @@ body {
   transform: rotateY(180deg);
   color: white;
   text-align: center;
-  background-color: black;
+  background-color: #1A237E;
 }
 
 .media-item {

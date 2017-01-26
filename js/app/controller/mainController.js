@@ -79,9 +79,9 @@ export class MainController {
             <div class="video-details">${checkedValue.viewers} viewers</div>
             <div class="video-details">From: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
             <div class="video-details">lat: ${checkedValue.location.coordinates.latitude} lng: ${checkedValue.location.coordinates.longitude}</div>
-            <div class="video-description" onclick="ctrl.showDetail(${checkedValue.id})">&#9899; &#9899; &#9899;</div>
+            <div class="video-description" onclick="ctrl.toggleDetail(${checkedValue.id})">&#9899; &#9899; &#9899;</div>
           </div>
-          <div class="card back">
+          <div class="card back" onmouseleave="ctrl.toggleDetail(${checkedValue.id})">
             <p>${checkedValue.description}</p>
           </div>
         </div>
@@ -131,8 +131,8 @@ export class MainController {
     window.model.pollData();
   }
 
-  showDetail() {
-    
+  toggleDetail(id) {
+    this.jqueryUtil.toggleDetail(id);
   }
 
 }

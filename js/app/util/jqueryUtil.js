@@ -22,4 +22,13 @@ export class JqueryUtil {
   getPollingInverval() {
     return $('#polling-interval').val();
   }
+
+  toggleDetail(id) {
+    const element = $(`#video-${id} > div > div`);
+    if (element.hasClass('turned')) {
+      element.removeClass('turned');
+    } else {
+      element.addClass('turned');
+    }
+  }
 }

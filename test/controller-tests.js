@@ -94,8 +94,8 @@ describe('MainController tests', () => {
       sinon.assert.calledOnce(clearStub);
       sinon.assert.calledOnce(radioStub);
 
-      // 3 appendTo call per createVideoElement
-      sinon.assert.callCount(appendStub, mainController.data.length * 3);
+      // 2 appendTo call per createVideoElement
+      sinon.assert.callCount(appendStub, mainController.data.length * 2);
     });
   });
 
@@ -133,7 +133,7 @@ describe('MainController tests', () => {
 
     it('create only live media entries', () => {
       mainController = new MainController(dataCopy, util);
-      sinon.assert.callCount(appendStub, 6);
+      sinon.assert.callCount(appendStub, 4);
     });
 
     it('create only offline media entries', () => {
@@ -143,7 +143,7 @@ describe('MainController tests', () => {
 
     it('create only video media entries', () => {
       mainController = new MainController(dataCopy, util);
-      sinon.assert.calledThrice(appendStub);
+      sinon.assert.calledTwice(appendStub);
     });
   });
 
