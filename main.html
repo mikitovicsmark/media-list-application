@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head> 
-        <link rel="stylesheet" type="text/css" href="js/app/app.css">
+        <link rel="stylesheet" type="text/css" href="css/app.css">
         <title>Media list</title>
     </head>
-    <body style="padding: 10%;">
-        <div style="position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 80%;
-            background-color: white;
-            padding-left: 10%;
-            z-index: 2;">
-          <div style="display: inline-block; width: 100%">
+    <body>
+        <div class="header-bar">
+          <div class="header-wrapper">
           <h1>Media list application</h1>
-          <div style="display: inline-block; width: 33%;">
+          <div class="header-setting">
             Filter by: 
-            <select id="filter-value" onchange="ctrl.updateList()">
+            <select id="filter-value" class="setting smaller-width" onchange="ctrl.updateList()">
               <option value="id">ID</option>
               <option value="type">Type</option>
               <option value="isLive">Live</option>
@@ -27,19 +21,19 @@
               <option value="location.country">Country</option>
               <option value="location.city">City</option>          
             </select>
-            <select id="filter-direction" onchange="ctrl.updateList()">
+            <select id="filter-direction" class="setting smaller-width" onchange="ctrl.updateList()">
               <option value="asc" selected="selected">Ascending</option>
               <option value="desc">Descending</option>         
             </select>
           </div>
-          <div style="display: inline-block; width: 33%;">
+          <div class="header-setting setting">
             <input type="radio" name="filter-radio" value="all" checked="checked" onclick="ctrl.updateList()">All
             <input type="radio" name="filter-radio" value="live" onclick="ctrl.updateList()">Live
             <input type="radio" name="filter-radio" value="offline" onclick="ctrl.updateList()">Offline
             <input type="radio" name="filter-radio" value="video" onclick="ctrl.updateList()">Video
           </div>
-          <div style="display: inline-block; width: 33%;">
-            Polling interval: <input id="polling-interval" type="number" value="5000" onchange="ctrl.restartPoll()">
+          <div class="header-setting">
+            Polling interval: <input id="polling-interval" class="setting smaller-width" type="number" value="5000" onchange="ctrl.restartPoll()"> ms.
           </div>
           <hr/>
           </div>

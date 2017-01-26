@@ -40,7 +40,7 @@ export class MainController {
       id: value.id || 0,
       type: value.type || '',
       isLive: value.isLive || false,
-      title: value.title || '',
+      title: value.title || 'No title',
       description: value.description || '',
       viewers: value.viewers || 0,
       picture: value.picture || '',
@@ -55,46 +55,40 @@ export class MainController {
     let g = Math.floor(Math.random() * 255);
     let b = Math.floor(Math.random() * 255);
 
-    this.jqueryUtil.appendTo('#video-container', `<div style="
-      width: 20%;
-      display: block;
-      float: left;
-      height: 300px;
-      background-color: rgb(${r},${g},${b});
-      " id="${elementId}"/>`);
+    this.jqueryUtil.appendTo('#video-container', `<div class="media-item" id="${elementId}"/>`);
 
     // watchlist add or remove button
     let watchlistButton = '';
     if (this.localStorageUtil.isInWatchlist(checkedValue.id)) {
-      watchlistButton = `<button onclick="ctrl.removeFromWatchlist(${checkedValue.id})">Remove from watchlist &#10007;</button>`;
+      watchlistButton = `<div class="watchlist-toggle" onclick="ctrl.removeFromWatchlist(${checkedValue.id})">&#9733;</div>`;
     } else {
-      watchlistButton = `<button onclick="ctrl.addToWatchlist(${checkedValue.id})">Add to watchlist &#9733;</button>`;
+      watchlistButton = `<div class="watchlist-toggle" onclick="ctrl.addToWatchlist(${checkedValue.id})">&#9734;</div>`;
     }
 
     // creating the html components for one object
     const mediaTemplate = `
-      <div id="f1_container">
-      <div id="f1_card" class="shadow">
-        <div class="front face">
-          <img class="video-image" src="${checkedValue.picture}"/>
-        </div>
-        <div class="back face center">
-          <p>${checkedValue.description}</p>
+      <div class="media-container">
+        <div class="media-card">
+          <div class="card front">
+            <div class="image-wrapper">
+              <img class="video-image" src="${checkedValue.picture}"/>
+              ${watchlistButton}
+            </div>
+            <div class="video-title"> ${checkedValue.title} </div>    
+            <div class="video-labels">${checkedValue.labels} </div>  
+            <div class="video-details">${checkedValue.viewers} viewers</div>
+            <div class="video-details">From: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
+            <div class="video-details">lat: ${checkedValue.location.coordinates.latitude} lng: ${checkedValue.location.coordinates.longitude}</div>
+            <div class="video-description" onclick="ctrl.showDetail(${checkedValue.id})">&#9899; &#9899; &#9899;</div>
+          </div>
+          <div class="card back">
+            <p>${checkedValue.description}</p>
+          </div>
         </div>
       </div>
-      </div>
-
-      ${watchlistButton}
       `;
     this.jqueryUtil.appendTo(`#${elementId}`, mediaTemplate);
   }
-  /*
-      <div class="video-title"> ${checkedValue.title} </div>
-      
-      <div class="video-title">Viewers:  ${checkedValue.viewers} </div>
-      <div class="video-title">Location: ${checkedValue.location.country} - ${checkedValue.location.city} </div>
-      <div class="video-title"> ${checkedValue.description} </div> 
-         */
 
   // filtering based on properties
   customSort(a, b) {
@@ -135,6 +129,10 @@ export class MainController {
 
   restartPoll() {
     window.model.pollData();
+  }
+
+  showDetail() {
+    
   }
 
 }
