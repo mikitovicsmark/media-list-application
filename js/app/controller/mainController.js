@@ -43,7 +43,7 @@ export class MainController {
       title: value.title || 'No title',
       description: value.description || '',
       viewers: value.viewers || 0,
-      picture: value.picture || '',
+      picture: value.picture || 'http:\/\/placehold.it\/32x32',
       location: value.location || { country: '', city: '', coordinates: { latitude: '', longitude: '' }},
       labels: value.labels || []
     }
