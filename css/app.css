@@ -36,7 +36,7 @@ body {
 }
 
 .smaller-width {
-  width: 150px;
+  width: 125px;
 }
 
 .media-container {
@@ -96,7 +96,7 @@ body {
 
 .video-title {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: 1px;
   padding-bottom: 5px;
 }
@@ -131,13 +131,13 @@ body {
 }
 
 .watchlist-title {
-  position: absolute;
+  position: fixed;
   left: 30px;
-  font-size: 30px;
+  font-size: 24px;
   color: white;
   width: 15%;
 }
 
 .watchlist {
-  font-size: 20px;
+  font-size: 18px;
 }
